@@ -125,14 +125,18 @@ function List() {
     const {posts} = usePosts();
 
     return (
-        <ul>
-            {posts.map((post, i) => (
-                <li key={i}>
-                    <h3>{post.title}</h3>
-                    <p>{post.body}</p>
-                </li>
-            ))}
-        </ul>
+        <>
+            <ul>
+                {posts.map((post, i) => (
+                    <li key={i}>
+                        <h3>{post.title}</h3>
+                        <p>{post.body}</p>
+                    </li>
+                ))}
+            </ul>
+
+            {/*<AtomicTest />*/}
+        </>
     );
 }
 
@@ -144,7 +148,7 @@ function Archive() {
     // every render. We could also move the posts outside the components, but I wanted to show you this trick 😉
     const [posts] = useState(() =>
         // 💥 WARNING: This might make your computer slow! Try a smaller `length` first
-        Array.from({ length: 20 }, () => createRandomPost())
+        Array.from({ length: 100 }, () => createRandomPost())
     );
 
     const [showArchive, setShowArchive] = useState(false);
