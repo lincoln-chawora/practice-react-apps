@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { faker } from "@faker-js/faker";
 import "./index.RenderProps.css";
+import withToggles from "./HOC";
 
 const products = Array.from({ length: 20 }, () => {
     return {
@@ -46,7 +47,7 @@ function CompanyItem({ company, defaultVisibility }) {
     );
 }
 
-function List({ title, items }) {
+function List({ title, items, render }) {
     const [isOpen, setIsOpen] = useState(true);
     const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -67,9 +68,7 @@ function List({ title, items }) {
             </div>
             {isOpen && (
                 <ul className="list">
-                    {displayItems.map((product) => (
-                        <ProductItem key={product.productName} product={product} />
-                    ))}
+                    {displayItems.map(render)}
                 </ul>
             )}
 
@@ -80,13 +79,26 @@ function List({ title, items }) {
     );
 }
 
+const ProductListWithToggles = withToggles(ProductList)
+
 export default function AppRenderProps() {
     return (
         <div>
             <h1>Render Props Demo</h1>
 
+            {/*<div className="col-2">*/}
+            {/*    <List title="Products" items={products} render={(product) => (*/}
+            {/*        <ProductItem key={product.productName} product={product} />*/}
+            {/*    )}  />*/}
+
+            {/*    <List title="Companies" items={companies} render={(company) => (*/}
+            {/*        <CompanyItem key={company.companyName} company={company} defaultVisibility={false} />*/}
+            {/*    )}  />*/}
+            {/*</div>*/}
+
             <div className="col-2">
-                <List title="Products" items={products} />
+                <ProductList title="Products HOC" items={products} />
+                <ProductListWithToggles title="Products HOC" items={products} />
             </div>
         </div>
     );
