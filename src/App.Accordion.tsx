@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, {Dispatch, SetStateAction, useState} from "react";
 import "./index.accordion.css";
 
 const faqs = [
@@ -16,7 +16,7 @@ const faqs = [
     },
 ];
 
-export default function AppAccordion() {
+const AppAccordion: React.FC = () => {
     return (
         <div>
             <Accordion data={faqs}/>
@@ -24,8 +24,14 @@ export default function AppAccordion() {
     );
 }
 
-function Accordion({data}) {
-    const [currentOpen, setCurrentOpen] = useState(null);
+export default AppAccordion
+
+interface AccordionProps {
+    data: {title: string, text: string}[]
+}
+
+const Accordion: React.FC<AccordionProps> = ({data}) => {
+    const [currentOpen, setCurrentOpen] = useState<number | null>(null);
 
     return (
         <ul className="accordion">
@@ -42,11 +48,19 @@ function Accordion({data}) {
     );
 }
 
-function AccordionItem({ faq, index, onOpen, currentOpen, children }) {
+interface AccordionItemProps {
+    faq: { title: string, text: string };
+    index: number;
+    onOpen: Dispatch<SetStateAction<number | null>>;
+    currentOpen: number | null;
+    children: React.ReactElement | string;
+}
+
+const AccordionItem: React.FC<AccordionItemProps> = ({ faq, index, onOpen, currentOpen, children }) => {
     const currIndex = index - 1;
     const isOpen = currIndex === currentOpen;
     function handleToggle() {
-        onOpen(isOpen ? null : currIndex);
+        onOpen(currIndex);
     }
 
     return (
