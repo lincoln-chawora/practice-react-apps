@@ -1,24 +1,28 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-function useGeolocation() {
-    const [isLoading, setIsLoading] = useState(false);
-    const [position, setPosition] = useState({});
-    const [error, setError] = useState(null);
+interface Position {
+    lat: number;
+    lng: number;
+}
+const useGeolocation = () => {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [position, setPosition] = useState<Position | undefined>(undefined);
+    const [error, setError] = useState<string|null>(null);
 
-    function getPosition() {
+    function getPosition(): void {
         if (!navigator.geolocation)
             return setError("Your browser does not support geolocation");
 
         setIsLoading(true);
         navigator.geolocation.getCurrentPosition(
-            (pos) => {
+            (pos: GeolocationPosition) => {
                 setPosition({
                     lat: pos.coords.latitude,
                     lng: pos.coords.longitude,
                 });
                 setIsLoading(false);
             },
-            (error) => {
+            (error: GeolocationPositionError) => {
                 setError(error.message);
                 setIsLoading(false);
             }
@@ -26,12 +30,12 @@ function useGeolocation() {
 
     }
 
-    return { position, error, isLoading, getPosition };
+    return {position, error, isLoading, getPosition} as const;
 }
 
-export default function AppGeolocate() {
-    const [countClicks, setCountClicks] = useState(0);
-    const { position: {lat, lng}, error, isLoading, getPosition } = useGeolocation();
+const AppGeolocate: React.FC = () => {
+    const [countClicks, setCountClicks] = useState<number>(0);
+    const {position, error, isLoading, getPosition} = useGeolocation();
 
     function handleClick() {
         setCountClicks((count) => count + 1);
@@ -41,20 +45,20 @@ export default function AppGeolocate() {
     return (
         <div>
             <button onClick={handleClick} disabled={isLoading}>
-                Get my position
+                {isLoading ? 'Loading...' : 'Get my position'}
             </button>
 
-            {isLoading && <p>Loading position...</p>}
             {error && <p>{error}</p>}
-            {!isLoading && !error && lat && lng && (
+
+            {!isLoading && !error && position && (
                 <p>
                     Your GPS position:{" "}
                     <a
                         target="_blank"
                         rel="noreferrer"
-                        href={`https://www.openstreetmap.org/#map=16/${lat}/${lng}`}
+                        href={`https://www.openstreetmap.org/#map=16/${position.lat}/${position.lng}`}
                     >
-                        {lat}, {lng}
+                        {position.lat}, {position.lng}
                     </a>
                 </p>
             )}
@@ -63,3 +67,5 @@ export default function AppGeolocate() {
         </div>
     );
 }
+
+export default AppGeolocate;
