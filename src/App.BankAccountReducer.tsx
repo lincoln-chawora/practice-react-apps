@@ -63,7 +63,7 @@ function reducer(state: typeof initialState, action: ACTION_TYPE) {
     }
 }
 
- const AppBankAccount = () => {
+ const AppBankAccountReducer = () => {
     const [{balance, loan, isActive}, dispatch] = useReducer(reducer, initialState);
 
     return (
@@ -105,4 +105,4 @@ function reducer(state: typeof initialState, action: ACTION_TYPE) {
         </div>
     );
 }
-export default AppBankAccount;
+export default AppBankAccountReducer;

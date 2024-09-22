@@ -1,9 +1,9 @@
-import {useState} from "react";
-import Logo from "./components/Logo";
-import Stats from "./components/Stats";
-import Form from "./components/Form";
-import PackingList from "./components/PackingList";
-import './index.travel.css';
+import React, {useState} from "react";
+import Logo from "./Apps/TravelList/Logo";
+import Stats from "./Apps/TravelList/Stats";
+import Form from "./Apps/TravelList/Form";
+import PackingList from "./Apps/TravelList/PackingList";
+import './Apps/TravelList/index.travel.css';
 
 const initialItems = [
   { id: 1, description: "Passports", quantity: 2, packed: false },
@@ -11,21 +11,28 @@ const initialItems = [
   { id: 3, description: "Tooth brush", quantity: 1, packed: true },
 ];
 
-export default function AppTravelList() {
-    const [items, setItems] = useState(initialItems);
+export interface TravelItem {
+    id: number;
+    quantity: number;
+    description: string;
+    packed: boolean
+}
 
-    function handleAddItems(item) {
+const AppTravelList: React.FC = () => {
+    const [items, setItems] = useState<TravelItem[]>([]);
+
+    function handleAddItems(item: TravelItem) {
         // Get current items and then update items array.
         setItems((items) => [...items, item]);
     }
 
-    function handleDeleteItem(id) {
+    function handleDeleteItem(id: number) {
         setItems((items) => (
             items.filter((item) => item.id !== id)
         ));
     }
 
-    function handleUpdateItem(id) {
+    function handleUpdateItem(id: number) {
         setItems(prevItems =>
             // Get current object (prevItems) then if the id matches the supplied id, get everything in that item and
             // update the packed value to be the opposite of the current value, otherwise return the whole item.
@@ -45,14 +52,18 @@ export default function AppTravelList() {
         <div className="app">
             <Logo />
             <Form onAddItems={handleAddItems}/>
-            <PackingList
-                items={items}
-                onDeleteItem={handleDeleteItem}
-                onUpdateItem={handleUpdateItem}
-                onClearList={handleClearList}
-            />
+            {items.length > 0 &&
+                <PackingList
+                    items={items}
+                    onDeleteItem={handleDeleteItem}
+                    onUpdateItem={handleUpdateItem}
+                    onClearList={handleClearList}
+                />
+            }
             <Stats items={items} />
         </div>
     )
 }
+
+export default AppTravelList;
 

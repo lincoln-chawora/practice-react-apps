@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.Accordion';
 import {Provider } from "react-redux";
-import store from "./store/store";
+import bankAccountStore from "./store/BankAccountStore";
+import App from './App.BankAccountRedux';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <React.StrictMode>
-      <Provider store={store}>
+      <Provider store={bankAccountStore}>
         <App />
       </Provider>
   </React.StrictMode>

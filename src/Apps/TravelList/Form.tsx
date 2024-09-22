@@ -1,10 +1,14 @@
-import {useState} from "react";
+import React, {Dispatch, FormEvent, SetStateAction, useState} from "react";
+import {TravelItem} from "../../App.TravelList";
 
-export default function Form({onAddItems}) {
-    const [description, setDescription] = useState('');
-    const [quantity, setQuantity] = useState(1);
+interface FormProps {
+    onAddItems: (newItem: TravelItem) => void
+}
+const Form: React.FC<FormProps> = ({onAddItems}) => {
+    const [description, setDescription] = useState<string>('');
+    const [quantity, setQuantity] = useState<number>(1);
 
-    function handleSubmit(event) {
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         if (!description) return;
@@ -42,3 +46,5 @@ export default function Form({onAddItems}) {
         </form>
     )
 }
+
+export default Form;

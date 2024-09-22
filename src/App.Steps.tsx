@@ -1,5 +1,7 @@
-import React, {ReactElement, ReactNode, useState} from "react";
+import React, {useState} from "react";
 import './index.steps.css';
+import StepMessage from "./Apps/Steps/StepMessage";
+import Button from "./Apps/Steps/Button";
 
 const messages = [
     "Learn react",
@@ -7,15 +9,7 @@ const messages = [
     "Invest in your new income"
 ];
 
-export default function AppSteps() {
-    return (
-        <div>
-            <Steps />
-        </div>
-    )
-}
-
-const Steps: React.FC = () => {
+const AppSteps: React.FC = () => {
     const [step, setStep] = useState<number>(1);
     const [isOpen, setIsOpen] = useState<boolean>(true);
 
@@ -31,9 +25,9 @@ const Steps: React.FC = () => {
 
     return (
         <div>
-            <button className="close" onClick={(e: React.MouseEvent<HTMLButtonElement>) => setIsOpen((isOpen) => !isOpen)}>
+            <Button classes="close" onClick={() => setIsOpen((isOpen) => !isOpen)}>
                 {isOpen ? 'X' : '+'}
-            </button>
+            </Button>
 
             {isOpen && (
                 <div className="steps">
@@ -64,33 +58,4 @@ const Steps: React.FC = () => {
     )
 }
 
-interface StepMessageProps {
-    readonly step: number;
-    readonly children: ReactNode
-}
-const StepMessage: React.FC<StepMessageProps> = ({step, children}) => {
-    return (
-        <div className="message">
-            <h3>Step {step}</h3>
-            {children}
-        </div>
-    )
-}
-
-interface ButtonProps {
-    readonly children: ReactNode;
-    readonly textColour?: string;
-    readonly bgColour?: string;
-    readonly onClick: () => void;
-}
-
-const Button: React.FC<ButtonProps> = ({children, textColour = '#fff', bgColour = '#7950f2', onClick}) => {
-    return (
-        <button
-            style={{ backgroundColor: bgColour, color: textColour}}
-            onClick={onClick}
-        >
-            {children}
-        </button>
-    )
-}
+export default AppSteps;

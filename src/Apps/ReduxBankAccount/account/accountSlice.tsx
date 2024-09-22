@@ -1,6 +1,15 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AppDispatch} from "../../../store/BankAccountStore";
 
-const initialState = {
+// Define the type for the state
+export interface AccountState {
+    balance: number;
+    loan: number;
+    loanPurpose: string;
+    isLoading: boolean;
+}
+
+const initialState: AccountState = {
     balance: 0,
     loan: 0,
     loanPurpose: '',
@@ -11,36 +20,36 @@ const accountSlice = createSlice({
     name: 'account',
     initialState,
     reducers: {
-        deposit(state, action) {
+        deposit(state: AccountState, action: PayloadAction<number>) {
             state.balance = state.balance + action.payload;
             state.isLoading = false;
         },
-        withdraw(state, action) {
+        withdraw(state: AccountState, action: PayloadAction<number>) {
             state.balance -= action.payload;
         },
         requestLoan: {
             // Prepare method receives data passed into action creator, this is useful for calling action creators with
             // multiple arguments because normally redux is expecting argument. The method will the return the data as
             // the payload is expecting it.
-            prepare(amount, purpose) {
+            prepare(loan: number, loanPurpose: string) {
                 return {
-                    payload: { amount, purpose }
+                    payload: { loan, loanPurpose }
                 }
             },
-            reducer(state, action) {
+            reducer(state: AccountState, action: PayloadAction<{ loan: number, loanPurpose: string }>) {
                 if (state.loan > 0) return;
 
-                state.loan = action.payload.amount;
-                state.loanPurpose = action.payload.purpose;
-                state.balance = state.balance + action.payload.amount
+                state.loan = action.payload.loan;
+                state.loanPurpose = action.payload.loanPurpose;
+                state.balance = state.balance + action.payload.loan
             },
         },
-        payLoan(state) {
+        payLoan(state: AccountState) {
             state.balance -= state.loan;
             state.loan = 0;
             state.loanPurpose = '';
         },
-        convertingCurrency(state) {
+        convertingCurrency(state: AccountState) {
             state.isLoading = true;
         }
     },
@@ -48,15 +57,14 @@ const accountSlice = createSlice({
 
 export const {withdraw, requestLoan, payLoan} = accountSlice.actions;
 
-export function deposit(amount, currency) {
+export function deposit(amount: number, currency: string) {
     if (currency === 'USD') return { type: 'account/deposit', payload: amount };
 
     // Using thunks means that we can return a function as opposed to the dispatch object, this function is ran after
     // the action is dispatched but before the store is updated. In the example below we're using an async operation to
     // convert currency amount from an api. Once we have the value we dispatch the deposit action with the payload we
     // want.
-    return async function (dispatch, getState) {
-        // const state = getState();
+    return async function (dispatch: AppDispatch) {
 
         dispatch({ type: 'account/convertingCurrency'});
 
@@ -67,9 +75,7 @@ export function deposit(amount, currency) {
         // Return action.
         dispatch({ type: 'account/deposit', payload: converted });
     }
-
 }
-
 
 export default accountSlice.reducer;
 

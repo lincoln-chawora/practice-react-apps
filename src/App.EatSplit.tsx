@@ -1,4 +1,4 @@
-import "./index.eatnSplit.css"
+import "./Apps/EatnSplit/index.eatnSplit.css"
 import React, {createContext, MouseEventHandler, useContext, useState} from "react";
 import {Friend, SplitInfo} from "./Apps/EatnSplit/eatnsplit.model";
 import AddFriendForm from "./Apps/EatnSplit/AddFriendForm";

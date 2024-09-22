@@ -1,15 +1,24 @@
-import {useState} from "react";
+import React, {ChangeEvent, useState} from "react";
+import Item from "./Item";
+import {TravelItem} from "../../App.TravelList";
 
-export default function PackingList({items, onDeleteItem, onUpdateItem, onClearList}) {
+interface PackingListProps {
+    items: TravelItem[];
+    onDeleteItem: (id: number) => void;
+    onUpdateItem: (id: number) => void;
+    onClearList: () => void;
+}
+const PackingList: React.FC<PackingListProps> = ({items, onDeleteItem, onUpdateItem, onClearList}) => {
     const [sortBy, setSortBy] = useState('input');
 
-    function handleSort(e) {
+    function handleSort(e: ChangeEvent<HTMLSelectElement>) {
         setSortBy(e.target.value)
     }
 
-    let sortedItems;
+    let sortedItems: TravelItem[];
 
-    if (sortBy === 'input') sortedItems = items;
+    sortedItems = items;
+
     if (sortBy === 'description')
         sortedItems = items
             .slice()
@@ -18,7 +27,7 @@ export default function PackingList({items, onDeleteItem, onUpdateItem, onClearL
     if (sortBy === 'packed')
         sortedItems = items
             .slice()
-            .sort((a, b) => Number(a.packed) - Number(b.packed));
+            .sort((a, b) => Number(b.packed) - Number(a.packed));
 
     return (
         <div className="list">
@@ -45,14 +54,4 @@ export default function PackingList({items, onDeleteItem, onUpdateItem, onClearL
     )
 }
 
-function Item ({item, onDeleteItem, onUpdateItem}) {
-    return (
-        <li>
-            <input type="checkbox" checked={item.packed} value={item.packed} onChange={() => onUpdateItem(item.id)} />
-            <span style={item.packed ? {textDecoration: "line-through"} : {}}>
-                {item.quantity} {item.description}
-            </span>
-            <button onClick={() => onDeleteItem(item.id)}>❌</button>
-        </li>
-    )
-}
+export default PackingList

@@ -1,11 +1,11 @@
-import CreateCustomer from "./features/customer/CreateCustomer";
-import Customer from "./features/customer/Customer";
-import AccountOperations from "./features/account/AccountOperations";
-import BalanceDisplay from "./features/account/BalanceDisplay";
-import "./index.ReduxIntro.css"
+import CreateCustomer from "./Apps/ReduxBankAccount/customer/CreateCustomer";
+import Customer from "./Apps/ReduxBankAccount/customer/Customer";
+import AccountOperations from "./Apps/ReduxBankAccount/account/AccountOperations";
+import BalanceDisplay from "./Apps/ReduxBankAccount/account/BalanceDisplay";
+import "./Apps/ReduxBankAccount/index.ReduxBankAccount.css"
 import {useSelector} from "react-redux";
 
-function AppReduxIntro() {
+function AppBankAccountRedux() {
     const fullName = useSelector(store => store.customer.fullName);
     return (
         <div>
@@ -23,4 +23,4 @@ function AppReduxIntro() {
     );
 }
 
-export default AppReduxIntro;
+export default AppBankAccountRedux;

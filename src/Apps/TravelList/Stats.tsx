@@ -1,4 +1,10 @@
-export default function Stats({items}) {
+import {TravelItem} from "../../App.TravelList";
+import React from "react";
+
+interface StatsProps {
+    items: TravelItem[]
+}
+const Stats: React.FC<StatsProps> = ({items}) => {
     if (!items.length) {
         return (
             <p className="stats">
@@ -21,3 +27,5 @@ export default function Stats({items}) {
         </footer>
     )
 }
+
+export default Stats
