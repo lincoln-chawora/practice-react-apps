@@ -4,9 +4,10 @@ import AccountOperations from "./Apps/ReduxBankAccount/account/AccountOperations
 import BalanceDisplay from "./Apps/ReduxBankAccount/account/BalanceDisplay";
 import "./Apps/ReduxBankAccount/index.ReduxBankAccount.css"
 import {useSelector} from "react-redux";
+import {RootState} from "./store/BankAccountStore";
 
 function AppBankAccountRedux() {
-    const fullName = useSelector(store => store.customer.fullName);
+    const fullName = useSelector((store: RootState) => store.customer.fullName);
     return (
         <div>
             <h1>🏦 The React-Redux Bank ⚛️</h1>
